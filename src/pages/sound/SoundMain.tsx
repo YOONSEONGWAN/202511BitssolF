@@ -27,8 +27,8 @@ function SoundMain(): React.ReactElement {
   const [keyword, setKeyword] = useState("");
   const [favorites, setFavorites] = useState<Sound[]>([]);
   const [favoriteIds, setFavoriteIds] = useState<Set<number>>(new Set());
-  const { playSound } = usePlayer();
   const navigate = useNavigate();
+  const { playSoundWithPlaylist } = usePlayer();
 
   useEffect(() => {
     api.get<Tag[]>("/v1/tags")
@@ -70,7 +70,7 @@ function SoundMain(): React.ReactElement {
   };
 
   const handleSoundClick = (soundId: number) => {
-    playSound(soundId);
+    playSoundWithPlaylist(soundId, sounds);  // 전체 목록 전달
     navigate('/soundplayer');
   };
 

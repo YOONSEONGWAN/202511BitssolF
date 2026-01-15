@@ -15,6 +15,8 @@ function App() {
   const [duration, setDuration] = useState(0);
   const [currentTime, setCurrentTime] = useState(0);
   const [repeatMode, setRepeatMode] = useState<'none' | 'all' | 'one'>('none');
+  const [playlist, setPlaylist] = useState<Sound[]>([]);
+  const [currentIndex, setCurrentIndex] = useState(-1);
   const audioRef = useRef<HTMLAudioElement | null>(null);
 
   const lastPlayedUrlRef = useRef<string | null>(null);
@@ -65,6 +67,65 @@ function App() {
       setCurrentSound(null);
     }
   };
+
+  // 재생 목록과 함께 음악 재생
+  const playSoundWithPlaylist = async (soundId: number, newPlaylist: Sound[]) => {
+    try {
+      await api.post(`/v1/sounds/${soundId}/play`);
+      const response = await api.get<Sound>(`/v1/sounds/${soundId}`);
+      
+      setPlaylist(newPlaylist);
+      const index = newPlaylist.findIndex(s => s.soundId === soundId);
+      setCurrentIndex(index);
+      setCurrentSound(response.data);
+      setIsPlaying(true);
+    } catch (error) {
+      console.error("음악 정보 불러오기 실패:", error);
+      alert("죄송합니다. 음악을 재생할 수 없습니다.\n잠시 후 다시 시도해 주세요.");
+      setCurrentSound(null);
+    }
+  };
+
+  // 다음 곡 재생
+const playNext = () => {
+  if (playlist.length === 0) return;
+  
+  let nextIndex = currentIndex + 1;
+  
+  // 마지막 곡이면
+  if (nextIndex >= playlist.length) {
+    if (repeatMode === 'all') {
+      nextIndex = 0; // 처음으로
+    } else {
+      setIsPlaying(false); // 정지
+      return;
+    }
+  }
+  
+  const nextSound = playlist[nextIndex];
+    setCurrentIndex(nextIndex);
+    playSound(nextSound.soundId);
+  };
+
+  // 이전 곡 재생
+  const playPrev = () => {
+    if (playlist.length === 0) return;
+    
+    let prevIndex = currentIndex - 1;
+    
+    if (prevIndex < 0) {
+      if (repeatMode === 'all') {
+        prevIndex = playlist.length - 1; // 마지막으로
+      } else {
+        prevIndex = 0; // 첫 곡 유지
+      }
+    }
+    
+    const prevSound = playlist[prevIndex];
+    setCurrentIndex(prevIndex);
+    playSound(prevSound.soundId);
+  };
+
   // 재생/일시정지 토글
   const togglePlayPause = () => {
     if (currentSound) {
@@ -129,11 +190,16 @@ function App() {
     duration,
     currentTime,
     repeatMode,
+    playlist,
+    currentIndex,
     playSound,
+    playSoundWithPlaylist,
     togglePlayPause,
     seekTo,
     stopSound,
-    toggleRepeatMode
+    toggleRepeatMode,
+    playNext,
+    playPrev,
   };
 
   const showMiniPlayer = location.pathname !== '/soundplayer' && currentSound;
@@ -146,6 +212,14 @@ function App() {
         loop={repeatMode === 'one'}
         onTimeUpdate={handleTimeUpdate}
         onLoadedMetadata={handleLoadedMetadata}
+        onEnded={() => {
+          if (repeatMode === 'all') {
+            playNext();
+          } else if (repeatMode === 'none') {
+            setIsPlaying(false);
+          }
+          // 'one'은 loop 속성이 처리
+        }}
       />
 
       <div className="container">

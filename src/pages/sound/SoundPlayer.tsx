@@ -20,7 +20,9 @@ function SoundPlayer() {
         duration,
         seekTo,
         repeatMode,
-        toggleRepeatMode
+        toggleRepeatMode,
+        playNext,
+        playPrev
     } = usePlayer();
     const navigate = useNavigate();
     // 즐겨찾기 상태 관리
@@ -153,11 +155,11 @@ function SoundPlayer() {
                 >
                     {repeatMode === 'one' ? '🔂' : '🔁'}
                 </button>
-                <button className="controlButton">{"<<"}</button>
+                <button className="controlButton" onClick={playPrev}>{"<<"}</button>
                 <button className="controlButton playPauseButton" onClick={togglePlayPause}>
                     {isPlaying ? "❚❚" : "▶"}
                 </button>
-                <button className="controlButton">{">>"}</button>
+                <button className="controlButton" onClick={playNext}>{">>"}</button>
             </div>
         </div>
     );

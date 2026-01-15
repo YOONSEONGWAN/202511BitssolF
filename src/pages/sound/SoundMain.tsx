@@ -11,6 +11,7 @@ interface Sound {
   title: string;
   thumbnailUrl: string;
   fileUrl: string;
+  uploader: string;
 }
 
 interface Tag {
@@ -160,6 +161,7 @@ function SoundMain(): React.ReactElement {
           <div className="sound-card" key={sound.soundId} onClick={() => handleSoundClick(sound.soundId)}>
             <img src={sound.thumbnailUrl} alt={sound.title} />
             <h4>{sound.title}</h4>
+            <p className="uploader-name">{sound.uploader}</p>
             <span 
               className={`favorite-star ${favoriteIds.has(sound.soundId) ? 'active' : ''}`}
               onClick={(e) => handleFavoriteToggle(e, sound.soundId)}
@@ -178,6 +180,7 @@ function SoundMain(): React.ReactElement {
               <div className="sound-card" key={sound.soundId} onClick={() => handleSoundClick(sound.soundId)}>
                 <img src={sound.thumbnailUrl} alt={sound.title} />
                 <h4>{sound.title}</h4>
+                <p className="uploader-name">{sound.uploader}</p>
                 <span 
                   className="favorite-star active"
                   onClick={(e) => handleFavoriteToggle(e, sound.soundId)}

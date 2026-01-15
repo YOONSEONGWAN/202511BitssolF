@@ -144,3 +144,7 @@
 .favoriteButton:hover {
     transform: scale(1.1);
 }
+
+.controlButton.active {
+    color: #1db954;  /* 활성화 시 초록색 */
+}

@@ -13,10 +13,12 @@ export interface PlayerContextType {
   isPlaying: boolean;
   duration: number;
   currentTime: number;
+  repeatMode: 'none' | 'all' | 'one';
   playSound: (soundId: number) => void;
   togglePlayPause: () => void;
   seekTo: (time: number) => void;
   stopSound: () => void;
+  toggleRepeatMode: () => void;
 }
 
 

@@ -14,6 +14,7 @@ function App() {
   const [isPlaying, setIsPlaying] = useState(false);
   const [duration, setDuration] = useState(0);
   const [currentTime, setCurrentTime] = useState(0);
+  const [repeatMode, setRepeatMode] = useState<'none' | 'all' | 'one'>('none');
   const audioRef = useRef<HTMLAudioElement | null>(null);
 
   const lastPlayedUrlRef = useRef<string | null>(null);
@@ -113,15 +114,26 @@ function App() {
     }
   };
 
+  // 반복 재생 토글
+  const toggleRepeatMode = () => {
+    setRepeatMode(prev => {
+      if (prev === 'none') return 'all';
+      if (prev === 'all') return 'one';
+      return 'none';
+    });
+  };
+
   const contextValue = {
     currentSound,
     isPlaying,
     duration,
     currentTime,
+    repeatMode,
     playSound,
     togglePlayPause,
     seekTo,
     stopSound,
+    toggleRepeatMode
   };
 
   const showMiniPlayer = location.pathname !== '/soundplayer' && currentSound;
@@ -131,6 +143,7 @@ function App() {
       <audio
         ref={audioRef}
         preload="auto"
+        loop={repeatMode === 'one'}
         onTimeUpdate={handleTimeUpdate}
         onLoadedMetadata={handleLoadedMetadata}
       />

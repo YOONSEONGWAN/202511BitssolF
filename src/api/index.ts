@@ -31,6 +31,7 @@ api.interceptors.response.use(
             window.location.href = '/login';  // 또는 navigate 사용
         }
         return Promise.reject(error);
+  
     }
 );
 

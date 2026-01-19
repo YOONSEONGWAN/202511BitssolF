@@ -1,6 +1,6 @@
 // 게시글 상세 페이지
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import { getBoardDetail, deleteBoard } from '../../api/boardApi'
 import LikeButton from '../../components/board/LikeButton'
@@ -42,8 +42,14 @@ function BoardDetail() {
         }
     }
 
+    const lastCalledId = useRef<string | undefined>(undefined)
+
     useEffect(() => {
-        loadBoard()
+        // StrictMode 등의 중복 호출 방지: id가 실제로 바뀌었을 때만 loadBoard 실행
+        if (lastCalledId.current !== id) {
+            lastCalledId.current = id
+            loadBoard()
+        }
     }, [id])
 
     const handleDelete = async () => {

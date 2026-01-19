@@ -102,10 +102,9 @@ function BoardForm() {
 
             <main className="home-screen__content">
                 <div className="bottom-panel">
-                    <div className="bottom-panel__bg" />
                     <div className="bottom-panel__content">
                         <form className="board-form" onSubmit={handleSubmit}>
-                            
+
                             {/* 카테고리 */}
                             <div className="board-form__group">
                                 <label className="board-form__label">카테고리</label>

@@ -29,7 +29,7 @@ function BoardVoteForm() {
   })
 
   const [voteOptions, setVoteOptions] = useState<string[]>(['', ''])
-  
+
 
   // ✅ 수정일 경우 기존 데이터 로드 (안전 처리 적용)
   useEffect(() => {
@@ -42,8 +42,8 @@ function BoardVoteForm() {
         // 🔥 핵심: voteOptions 구조 안전하게 파싱
         const parsedVoteOptions: string[] = Array.isArray(data.voteOptions)
           ? data.voteOptions.map((v: RawVoteOption) =>
-              v.text ?? v.optionText ?? v.content ?? ''
-            )
+            v.text ?? v.optionText ?? v.content ?? ''
+          )
           : []
 
 
@@ -134,7 +134,6 @@ function BoardVoteForm() {
 
       <main className="home-screen__content">
         <div className="bottom-panel">
-          <div className="bottom-panel__bg" />
           <div className="bottom-panel__content">
             <form className="board-form" onSubmit={handleSubmit}>
               {/* 제목 */}

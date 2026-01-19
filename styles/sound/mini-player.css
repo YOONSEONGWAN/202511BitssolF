@@ -15,6 +15,7 @@
     padding: 8px 12px;
     box-sizing: border-box;
     z-index: 10;
+    position: relative;
 }
 
 .player-container img {
@@ -56,4 +57,19 @@
 
 .player-container .close-btn:hover {
     color: #fff;
+}
+
+
+.mini-progress-bar {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 3px;  /* 얇은 바 */
+    background-color: rgba(255, 255, 255, 0.3);  /* 배경색 (회색 투명) */
+}
+.mini-progress-fill {
+    height: 100%;
+    background-color: #1db954;  /* Spotify 스타일 초록색, 원하는 색으로 변경 가능 */
+    transition: width 0.1s linear;  /* 부드러운 애니메이션 */
 }

@@ -11,6 +11,7 @@ interface Sound {
   title: string;
   thumbnailUrl: string;
   fileUrl: string;
+  uploader: string;
 }
 
 interface Tag {
@@ -26,8 +27,8 @@ function SoundMain(): React.ReactElement {
   const [keyword, setKeyword] = useState("");
   const [favorites, setFavorites] = useState<Sound[]>([]);
   const [favoriteIds, setFavoriteIds] = useState<Set<number>>(new Set());
-  const { playSound } = usePlayer();
   const navigate = useNavigate();
+  const { playSoundWithPlaylist } = usePlayer();
 
   useEffect(() => {
     api.get<Tag[]>("/v1/tags")
@@ -69,7 +70,7 @@ function SoundMain(): React.ReactElement {
   };
 
   const handleSoundClick = (soundId: number) => {
-    playSound(soundId);
+    playSoundWithPlaylist(soundId, sounds);  // 전체 목록 전달
     navigate('/soundplayer');
   };
 
@@ -160,6 +161,7 @@ function SoundMain(): React.ReactElement {
           <div className="sound-card" key={sound.soundId} onClick={() => handleSoundClick(sound.soundId)}>
             <img src={sound.thumbnailUrl} alt={sound.title} />
             <h4>{sound.title}</h4>
+            <p className="uploader-name">{sound.uploader}</p>
             <span 
               className={`favorite-star ${favoriteIds.has(sound.soundId) ? 'active' : ''}`}
               onClick={(e) => handleFavoriteToggle(e, sound.soundId)}
@@ -178,6 +180,7 @@ function SoundMain(): React.ReactElement {
               <div className="sound-card" key={sound.soundId} onClick={() => handleSoundClick(sound.soundId)}>
                 <img src={sound.thumbnailUrl} alt={sound.title} />
                 <h4>{sound.title}</h4>
+                <p className="uploader-name">{sound.uploader}</p>
                 <span 
                   className="favorite-star active"
                   onClick={(e) => handleFavoriteToggle(e, sound.soundId)}
